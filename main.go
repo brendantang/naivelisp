@@ -3,7 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"github.com/brendantang/naive-lisp/interpreter"
+	"github.com/brendantang/naive-lisp/expression"
 	"github.com/brendantang/naive-lisp/parser"
 	"log"
 	"os"
@@ -20,7 +20,7 @@ func Start(prompt string) error {
 		if err != nil {
 			return err
 		}
-		val, err := interpreter.Eval(parser.Parse(input))
+		val, env, err := expression.Eval(parser.Parse(input))
 		if err != nil {
 			return err
 		}
@@ -39,6 +39,6 @@ func GetInput() (string, error) {
 }
 
 // LispString converts a Lisp value into a readable string.
-func LispString(interpreter.Expression) string {
+func LispString(expression.Expression) string {
 	return "Implement lisp string"
 }
