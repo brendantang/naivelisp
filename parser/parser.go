@@ -25,46 +25,45 @@ func Tokenize(program string) []string {
 
 // ReadFromTokens tries to parse a list of tokens into a Lisp expression.
 func ReadFromTokens(tokens []string) (expression.Expression, error) {
+
+	// error if tokens empty
 	if len(tokens) == 0 {
 		return nil, errors.New("Unexpected end of file")
 	}
 
-	first, rest := tokens[0], tokens[1:]
+	head, tokens := tokens[0], tokens[1:]
 
 	// First token cannot indicate the end of a list.
-	if first == ")" {
+	if head == ")" {
 		return nil, errors.New("Unexpected ')'")
 	}
 
-	// First token indicates the start of a list.
-	if first == "(" {
+	// Token indicates the start of a list.
+	if head == "(" {
+
 		// Initialize an empty list
 		var l []expression.Expression
 
-		// Range over the remaining tokens
-		for i, currentToken := range rest {
+		for tokens[0] != ")" {
+			fmt.Printf("\ntokens:%v\n", tokens)
 
-			// Current token indicates the end of the list.
-			if currentToken == ")" {
-				return expression.NewList(l...), nil
-			}
-
-			//
-			expressionsToAppend, err := ReadFromTokens(rest[i:])
+			expressionToAppend, err := ReadFromTokens(tokens)
 			if err != nil {
 				return nil, err
 			}
-			l = append(l, expressionsToAppend)
+			l = append(l, expressionToAppend)
 
+			tokens = tokens[1:] // pop off the element you just added
 		}
+		return expression.NewList(l...), nil
 	}
 
 	// Token is either a Number or a Symbol
-	maybeNum, err := ParseNumber(first)
+	maybeNum, err := ParseNumber(head)
 
 	// If not a Number, must be a Symbol
 	if err != nil {
-		return ParseSymbol(first), nil
+		return ParseSymbol(head), nil
 	}
 
 	return maybeNum, nil
@@ -82,4 +81,21 @@ func ParseNumber(s string) (expression.Number, error) {
 // ParseSymbol parses a string into a Symbol.
 func ParseSymbol(s string) expression.Symbol {
 	return expression.NewSymbol(s)
+}
+
+func ParseList(tokens []string) (l expression.List) {
+	for i := 0; i < len(tokens); {
+		switch t := tokens[i]; t {
+		case ")":
+			return l
+		case "(":
+			sublist := ParseList(tokens[i:])
+			l = append(l, sublist)
+			i += sublist.Length()
+		default:
+			l = append(l, ParseAtom(t))
+			i++
+
+		}
+	}
 }

@@ -77,8 +77,8 @@ var testCases = []struct {
 	},
 	{
 		description:    "nested lists",
-		input:          "(1 (2 3) (4 (5))",
-		expectedTokens: []string{"(", "1", "(", "2", "3", ")", "(", "4", "(", "5", ")", ")"},
+		input:          "(1 (2 3) (4 (5)))",
+		expectedTokens: []string{"(", "1", "(", "2", "3", ")", "(", "4", "(", "5", ")", ")", ")"},
 		expectedExpression: expression.NewList(
 			expression.NewNumber(1),
 			expression.NewList(
@@ -95,8 +95,8 @@ var testCases = []struct {
 	},
 	{
 		description:    "extra spaces",
-		input:          "(1 (2 3  )   (4  (5))",
-		expectedTokens: []string{"(", "1", "(", "2", "3", ")", "(", "4", "(", "5", ")", ")"},
+		input:          "(1 (2 3  )   (4  (5)))",
+		expectedTokens: []string{"(", "1", "(", "2", "3", ")", "(", "4", "(", "5", ")", ")", ")"},
 		expectedExpression: expression.NewList(
 			expression.NewNumber(1),
 			expression.NewList(

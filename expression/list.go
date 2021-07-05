@@ -16,6 +16,11 @@ func (l List) ToSlice() []Expression {
 	return l.elements
 }
 
+// Length returns the number of Expressions in the List.
+func (l List) Length() int {
+	return len(l.elements)
+}
+
 // Equal checks if a List l is equal to another Expression without evaluating
 // them.
 func (l List) Equal(other Expression) bool {
