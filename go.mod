@@ -1,3 +1,3 @@
-module github.com/brendantang/naive-lisp
+module github.com/brendantang/naivelisp
 
 go 1.16

@@ -1,7 +1,7 @@
 package parser
 
 import (
-	"github.com/brendantang/naive-lisp/expression"
+	"github.com/brendantang/naivelisp/expression"
 	"testing"
 )
 
@@ -20,7 +20,7 @@ func TestParse(t *testing.T) {
 		if err != nil {
 			t.Fatalf("FAIL: %s\nError: %v", c.description, err)
 		}
-		if !expression.Equal(exp, c.expectedExpression) {
+		if !exp.Equal(c.expectedExpression) {
 			t.Fatalf("FAIL: %s\nInput: %q\nExpected: %#v\nGot: %#v\n", c.description, c.input, c.expectedExpression, exp)
 		}
 	}
@@ -47,11 +47,6 @@ var testCases = []struct {
 	expectedExpression expression.Expression
 }{
 	{
-		description:    "empty string",
-		input:          "",
-		expectedTokens: []string{},
-	},
-	{
 		description:        "symbol",
 		input:              "foo",
 		expectedTokens:     []string{"foo"},
@@ -61,23 +56,23 @@ var testCases = []struct {
 		description:        "integer",
 		input:              "25",
 		expectedTokens:     []string{"25"},
-		expectedExpression: expression.NumberFromFloat(25),
+		expectedExpression: expression.NewNumber(25),
 	},
 	{
 		description:        "float",
 		input:              "253254.3",
 		expectedTokens:     []string{"253254.3"},
-		expectedExpression: expression.NumberFromFloat(253254.3),
+		expectedExpression: expression.NewNumber(253254.3),
 	},
 	{
 		description:    "list",
 		input:          "(1 3 4 5)",
 		expectedTokens: []string{"(", "1", "3", "4", "5", ")"},
 		expectedExpression: expression.NewList(
-			expression.NumberFromFloat(1),
-			expression.NumberFromFloat(3),
-			expression.NumberFromFloat(4),
-			expression.NumberFromFloat(5),
+			expression.NewNumber(1),
+			expression.NewNumber(3),
+			expression.NewNumber(4),
+			expression.NewNumber(5),
 		),
 	},
 	{
@@ -85,15 +80,15 @@ var testCases = []struct {
 		input:          "(1 (2 3) (4 (5))",
 		expectedTokens: []string{"(", "1", "(", "2", "3", ")", "(", "4", "(", "5", ")", ")"},
 		expectedExpression: expression.NewList(
-			expression.NumberFromFloat(1),
+			expression.NewNumber(1),
 			expression.NewList(
-				expression.NumberFromFloat(2),
-				expression.NumberFromFloat(3),
+				expression.NewNumber(2),
+				expression.NewNumber(3),
 			),
 			expression.NewList(
-				expression.NumberFromFloat(4),
+				expression.NewNumber(4),
 				expression.NewList(
-					expression.NumberFromFloat(5),
+					expression.NewNumber(5),
 				),
 			),
 		),
@@ -103,15 +98,15 @@ var testCases = []struct {
 		input:          "(1 (2 3  )   (4  (5))",
 		expectedTokens: []string{"(", "1", "(", "2", "3", ")", "(", "4", "(", "5", ")", ")"},
 		expectedExpression: expression.NewList(
-			expression.NumberFromFloat(1),
+			expression.NewNumber(1),
 			expression.NewList(
-				expression.NumberFromFloat(2),
-				expression.NumberFromFloat(3),
+				expression.NewNumber(2),
+				expression.NewNumber(3),
 			),
 			expression.NewList(
-				expression.NumberFromFloat(4),
+				expression.NewNumber(4),
 				expression.NewList(
-					expression.NumberFromFloat(5),
+					expression.NewNumber(5),
 				),
 			),
 		),

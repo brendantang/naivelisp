@@ -2,7 +2,9 @@ package parser
 
 import (
 	"errors"
-	"github.com/brendantang/naive-lisp/expression"
+	"fmt"
+	"github.com/brendantang/naivelisp/expression"
+	"strconv"
 	"strings"
 )
 
@@ -44,7 +46,7 @@ func ReadFromTokens(tokens []string) (expression.Expression, error) {
 
 			// Current token indicates the end of the list.
 			if currentToken == ")" {
-				return l, nil
+				return expression.NewList(l...), nil
 			}
 
 			//
@@ -57,5 +59,27 @@ func ReadFromTokens(tokens []string) (expression.Expression, error) {
 		}
 	}
 
-	return nil, nil
+	// Token is either a Number or a Symbol
+	maybeNum, err := ParseNumber(first)
+
+	// If not a Number, must be a Symbol
+	if err != nil {
+		return ParseSymbol(first), nil
+	}
+
+	return maybeNum, nil
+}
+
+// ParseNumber tries to parse a Number from a string.
+func ParseNumber(s string) (expression.Number, error) {
+	val, err := strconv.ParseFloat(s, 64)
+	if err != nil {
+		return expression.NewNumber(0), fmt.Errorf("could not convert '%s' into a number", s)
+	}
+	return expression.NewNumber(val), nil
+}
+
+// ParseSymbol parses a string into a Symbol.
+func ParseSymbol(s string) expression.Symbol {
+	return expression.NewSymbol(s)
 }
