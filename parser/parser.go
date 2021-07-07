@@ -40,33 +40,11 @@ func ReadFromTokens(tokens []string) (expression.Expression, error) {
 
 	// Token indicates the start of a list.
 	if head == "(" {
-
-		// Initialize an empty list
-		var l []expression.Expression
-
-		for tokens[0] != ")" {
-			fmt.Printf("\ntokens:%v\n", tokens)
-
-			expressionToAppend, err := ReadFromTokens(tokens)
-			if err != nil {
-				return nil, err
-			}
-			l = append(l, expressionToAppend)
-
-			tokens = tokens[1:] // pop off the element you just added
-		}
-		return expression.NewList(l...), nil
+		return ParseList(tokens), nil
 	}
 
 	// Token is either a Number or a Symbol
-	maybeNum, err := ParseNumber(head)
-
-	// If not a Number, must be a Symbol
-	if err != nil {
-		return ParseSymbol(head), nil
-	}
-
-	return maybeNum, nil
+	return ParseAtom(head), nil
 }
 
 // ParseNumber tries to parse a Number from a string.
@@ -83,19 +61,31 @@ func ParseSymbol(s string) expression.Symbol {
 	return expression.NewSymbol(s)
 }
 
-func ParseList(tokens []string) (l expression.List) {
+// ParseAtom first tries to parse a token as a Number, and if it fails, parses
+// it as a Symbol.
+func ParseAtom(s string) expression.Expression {
+	maybeNum, err := ParseNumber(s)
+	if err != nil {
+		return ParseSymbol(s)
+	}
+	return maybeNum
+}
+
+// ParseList parses a list of tokens into a List.
+func ParseList(tokens []string) expression.List {
+	l := expression.NewList()
 	for i := 0; i < len(tokens); {
 		switch t := tokens[i]; t {
 		case ")":
 			return l
 		case "(":
-			sublist := ParseList(tokens[i:])
-			l = append(l, sublist)
-			i += sublist.Length()
+			sublist := ParseList(tokens[i+1:])
+			l = l.Append(sublist)
+			i += sublist.Length() + 2
 		default:
-			l = append(l, ParseAtom(t))
+			l = l.Append(ParseAtom(t))
 			i++
-
 		}
 	}
+	return l
 }

@@ -39,3 +39,15 @@ func (l List) Equal(other Expression) bool {
 	return false
 
 }
+
+// Concat adds List other to the end of List l.
+func (l List) Concat(other List) List {
+	es := append(l.elements, other.elements...)
+	return NewList(es...)
+}
+
+// Append adds Expression e to the end of List l.
+func (l List) Append(e Expression) List {
+	es := append(l.elements, e)
+	return NewList(es...)
+}
