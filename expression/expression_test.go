@@ -45,4 +45,26 @@ var testCases = []struct {
 		),
 		expectedString: "(1 ok 23.345)",
 	},
+	{
+		description: "nested list",
+		expression: NewList(
+			NewNumber(1),
+			NewSymbol("ok"),
+			NewList(
+				NewNumber(5),
+				NewSymbol("foo"),
+			),
+			NewList(
+				NewList(
+					NewSymbol("ok"),
+					NewSymbol("computer"),
+				),
+				NewList(
+					NewNumber(1),
+				),
+			),
+			NewNumber(23.345),
+		),
+		expectedString: "(1 ok (5 foo) ((ok computer) (1)) 23.345)",
+	},
 }

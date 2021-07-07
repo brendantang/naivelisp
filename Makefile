@@ -1,2 +1,2 @@
 test:
-	go test ./parser
+	go test ./parser ./expression
