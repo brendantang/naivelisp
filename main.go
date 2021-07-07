@@ -30,7 +30,7 @@ func repl(prompt string) error {
 			return err
 		}
 		if val != nil {
-			fmt.Println(LispString(val))
+			fmt.Println(val.String())
 		}
 		env = newEnv
 	}
@@ -41,9 +41,4 @@ func repl(prompt string) error {
 func getInput() (string, error) {
 	reader := bufio.NewReader(os.Stdin)
 	return reader.ReadString('\n')
-}
-
-// LispString converts a Lisp value into a readable string.
-func LispString(expression.Expression) string {
-	return "Implement lisp string"
 }
