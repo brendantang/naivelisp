@@ -19,3 +19,8 @@ func (s Symbol) Equal(other Expression) bool {
 	}
 	return false
 }
+
+//String returns a Lisp string representing the symbol.
+func (s Symbol) String() string {
+	return s.name
+}

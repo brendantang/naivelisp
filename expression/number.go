@@ -1,5 +1,9 @@
 package expression
 
+import (
+	"strconv"
+)
+
 // A Number is an Atomic value representing a number. All numbers are internally
 // Go float64.
 type Number struct {
@@ -19,4 +23,9 @@ func (n Number) Equal(other Expression) bool {
 		return n == otherNum
 	}
 	return false
+}
+
+//String returns a Lisp string representing the number.
+func (n Number) String() string {
+	return strconv.FormatFloat(n.value, 'f', -1, 64)
 }
