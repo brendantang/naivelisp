@@ -3,8 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"github.com/brendantang/naivelisp/expression"
-	"github.com/brendantang/naivelisp/parser"
+	"github.com/brendantang/naivelisp/lisp"
 	"log"
 	"os"
 )
@@ -15,17 +14,17 @@ func main() {
 
 // Launch an interactive lisp prompt.
 func repl(prompt string) error {
-	var env expression.Environment
+	var env lisp.Environment
 	for true {
 		input, err := getInput()
 		if err != nil {
 			return err
 		}
-		expressions, err := parser.Parse(input)
+		exp, err := lisp.Parse(input)
 		if err != nil {
 			return err
 		}
-		val, newEnv, err := expression.Eval(expressions, env)
+		val, newEnv, err := lisp.Eval(exp, env)
 		if err != nil {
 			return err
 		}

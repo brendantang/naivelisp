@@ -1,15 +1,14 @@
-package parser
+package lisp
 
 import (
 	"errors"
 	"fmt"
-	"github.com/brendantang/naivelisp/expression"
 	"strconv"
 	"strings"
 )
 
-// Parse tries to read a string into a Lisp expression.
-func Parse(program string) (expression.Expression, error) { return ReadFromTokens(Tokenize(program)) }
+// Parse tries to read a string into a Lisp
+func Parse(program string) (Expression, error) { return ReadFromTokens(Tokenize(program)) }
 
 // Tokenize splits a string into tokens for the parser.
 func Tokenize(program string) []string {
@@ -23,8 +22,8 @@ func Tokenize(program string) []string {
 	)
 }
 
-// ReadFromTokens tries to parse a list of tokens into a Lisp expression.
-func ReadFromTokens(tokens []string) (expression.Expression, error) {
+// ReadFromTokens tries to parse a list of tokens into a Lisp
+func ReadFromTokens(tokens []string) (Expression, error) {
 
 	// error if tokens empty
 	if len(tokens) == 0 {
@@ -48,22 +47,22 @@ func ReadFromTokens(tokens []string) (expression.Expression, error) {
 }
 
 // ParseNumber tries to parse a Number from a string.
-func ParseNumber(s string) (expression.Number, error) {
+func ParseNumber(s string) (Number, error) {
 	val, err := strconv.ParseFloat(s, 64)
 	if err != nil {
-		return expression.NewNumber(0), fmt.Errorf("could not convert '%s' into a number", s)
+		return NewNumber(0), fmt.Errorf("could not convert '%s' into a number", s)
 	}
-	return expression.NewNumber(val), nil
+	return NewNumber(val), nil
 }
 
 // ParseSymbol parses a string into a Symbol.
-func ParseSymbol(s string) expression.Symbol {
-	return expression.NewSymbol(s)
+func ParseSymbol(s string) Symbol {
+	return NewSymbol(s)
 }
 
 // ParseAtom first tries to parse a token as a Number, and if it fails, parses
 // it as a Symbol.
-func ParseAtom(s string) expression.Expression {
+func ParseAtom(s string) Expression {
 	maybeNum, err := ParseNumber(s)
 	if err != nil {
 		return ParseSymbol(s)
@@ -72,8 +71,8 @@ func ParseAtom(s string) expression.Expression {
 }
 
 // ParseList parses a list of tokens into a List.
-func ParseList(tokens []string) expression.List {
-	l := expression.NewList()
+func ParseList(tokens []string) List {
+	l := NewList()
 	for i := 0; i < len(tokens); {
 		switch t := tokens[i]; t {
 		case ")":

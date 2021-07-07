@@ -1,12 +1,11 @@
-package parser
+package lisp
 
 import (
-	"github.com/brendantang/naivelisp/expression"
 	"testing"
 )
 
 func TestTokenize(t *testing.T) {
-	for _, c := range testCases {
+	for _, c := range parserTestCases {
 		tokens := Tokenize(c.input)
 		if !TokensEqual(tokens, c.expectedTokens) {
 			t.Fatalf("FAIL: %s\nInput: %q\nExpected: %#v\nGot: %#v\n", c.description, c.input, c.expectedTokens, tokens)
@@ -15,7 +14,7 @@ func TestTokenize(t *testing.T) {
 }
 
 func TestParse(t *testing.T) {
-	for _, c := range testCases {
+	for _, c := range parserTestCases {
 		exp, err := Parse(c.input)
 		if err != nil {
 			t.Fatalf("FAIL: %s\nError: %v", c.description, err)
@@ -40,55 +39,55 @@ func TokensEqual(a, b []string) bool {
 
 }
 
-var testCases = []struct {
+var parserTestCases = []struct {
 	description        string
 	input              string
 	expectedTokens     []string
-	expectedExpression expression.Expression
+	expectedExpression Expression
 }{
 	{
 		description:        "symbol",
 		input:              "foo",
 		expectedTokens:     []string{"foo"},
-		expectedExpression: expression.NewSymbol("foo"),
+		expectedExpression: NewSymbol("foo"),
 	},
 	{
 		description:        "integer",
 		input:              "25",
 		expectedTokens:     []string{"25"},
-		expectedExpression: expression.NewNumber(25),
+		expectedExpression: NewNumber(25),
 	},
 	{
 		description:        "float",
 		input:              "253254.3",
 		expectedTokens:     []string{"253254.3"},
-		expectedExpression: expression.NewNumber(253254.3),
+		expectedExpression: NewNumber(253254.3),
 	},
 	{
 		description:    "list",
 		input:          "(1 3 4 5)",
 		expectedTokens: []string{"(", "1", "3", "4", "5", ")"},
-		expectedExpression: expression.NewList(
-			expression.NewNumber(1),
-			expression.NewNumber(3),
-			expression.NewNumber(4),
-			expression.NewNumber(5),
+		expectedExpression: NewList(
+			NewNumber(1),
+			NewNumber(3),
+			NewNumber(4),
+			NewNumber(5),
 		),
 	},
 	{
 		description:    "nested lists",
 		input:          "(1 (2 3) (4 (5)))",
 		expectedTokens: []string{"(", "1", "(", "2", "3", ")", "(", "4", "(", "5", ")", ")", ")"},
-		expectedExpression: expression.NewList(
-			expression.NewNumber(1),
-			expression.NewList(
-				expression.NewNumber(2),
-				expression.NewNumber(3),
+		expectedExpression: NewList(
+			NewNumber(1),
+			NewList(
+				NewNumber(2),
+				NewNumber(3),
 			),
-			expression.NewList(
-				expression.NewNumber(4),
-				expression.NewList(
-					expression.NewNumber(5),
+			NewList(
+				NewNumber(4),
+				NewList(
+					NewNumber(5),
 				),
 			),
 		),
@@ -97,16 +96,16 @@ var testCases = []struct {
 		description:    "extra spaces",
 		input:          "(1 (2 3  )   (4  (5)))",
 		expectedTokens: []string{"(", "1", "(", "2", "3", ")", "(", "4", "(", "5", ")", ")", ")"},
-		expectedExpression: expression.NewList(
-			expression.NewNumber(1),
-			expression.NewList(
-				expression.NewNumber(2),
-				expression.NewNumber(3),
+		expectedExpression: NewList(
+			NewNumber(1),
+			NewList(
+				NewNumber(2),
+				NewNumber(3),
 			),
-			expression.NewList(
-				expression.NewNumber(4),
-				expression.NewList(
-					expression.NewNumber(5),
+			NewList(
+				NewNumber(4),
+				NewList(
+					NewNumber(5),
 				),
 			),
 		),

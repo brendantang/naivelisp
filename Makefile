@@ -1,5 +1,5 @@
 test:
-	go test ./parser ./expression
+	go test ./lisp
 
 repl:
 	go run .

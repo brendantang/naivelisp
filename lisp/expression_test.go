@@ -1,11 +1,11 @@
-package expression
+package lisp
 
 import (
 	"testing"
 )
 
 func TestString(t *testing.T) {
-	for _, c := range testCases {
+	for _, c := range expressionTestCases {
 		asString := c.expression.String()
 		if !(asString == c.expectedString) {
 			t.Fatalf("FAIL: %s\nInput: %q\nExpected: %#v\nGot: %#v\n", c.description, c.expression, c.expectedString, asString)
@@ -16,7 +16,7 @@ func TestString(t *testing.T) {
 func TestEqual(t *testing.T) {
 }
 
-var testCases = []struct {
+var expressionTestCases = []struct {
 	description    string
 	expression     Expression
 	expectedString string

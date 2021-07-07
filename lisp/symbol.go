@@ -1,4 +1,4 @@
-package expression
+package lisp
 
 // A Symbol is an Atomic value which represents a variable name.
 type Symbol struct {
