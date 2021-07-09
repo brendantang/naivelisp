@@ -15,8 +15,6 @@ func NewNumber(f float64) Number {
 	return Number{f}
 }
 
-// Equal checks if a Number n is equal to another Expression without evaluating
-// them.
 func (n Number) Equal(other Expression) bool {
 	otherNum, ok := other.(Number)
 	if ok {
