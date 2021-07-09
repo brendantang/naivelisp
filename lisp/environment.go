@@ -11,7 +11,7 @@ func (e Environment) get(key string) (exp Expression, ok bool) {
 }
 
 func (e Environment) Equal(other Environment) bool {
-	return false
+	panic("TODO: check if Environments are equal")
 }
 
 func StdEnv() Environment {

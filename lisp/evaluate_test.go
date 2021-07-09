@@ -12,7 +12,7 @@ func TestEval(t *testing.T) {
 		}
 		if !(c.wantExp.Equal(gotExp) && c.wantEnv.Equal(gotEnv)) {
 			t.Fatalf(
-				"FAIL: %s\nInput: %v\n%v\n\nExpected: %v\n%v\nGot: %v\n%v\n",
+				"FAIL: %s\nInput: %#v\n%#v\n\nExpected: %#v\n%#v\nGot: %#v\n%#v\n",
 				c.description,
 				c.haveExp,
 				c.haveEnv,
