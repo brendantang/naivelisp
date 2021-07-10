@@ -8,7 +8,7 @@ import (
 )
 
 // Parse tries to read a string into a Lisp
-func Parse(program string) (expression, error) { return readFromTokens(tokenize(program)) }
+func Parse(program string) (Expression, error) { return readFromTokens(tokenize(program)) }
 
 // tokenize splits a string into tokens for the parser.
 func tokenize(program string) []string {
@@ -23,7 +23,7 @@ func tokenize(program string) []string {
 }
 
 // readFromTokens tries to parse a list of tokens into a Lisp
-func readFromTokens(tokens []string) (expression, error) {
+func readFromTokens(tokens []string) (Expression, error) {
 
 	// error if tokens empty
 	if len(tokens) == 0 {
@@ -62,7 +62,7 @@ func parseSymbol(s string) symbol {
 
 // parseAtom first tries to parse a token as a number, and if it fails, parses
 // it as a Symbol.
-func parseAtom(s string) expression {
+func parseAtom(s string) Expression {
 	maybeNum, err := parseNumber(s)
 	if err != nil {
 		return parseSymbol(s)

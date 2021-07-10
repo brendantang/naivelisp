@@ -5,37 +5,37 @@ import (
 )
 
 func TestString(t *testing.T) {
-	for _, c := range expressionTestCases {
-		asString := c.expression.String()
+	for _, c := range ExpressionTestCases {
+		asString := c.Expression.String()
 		if !(asString == c.expectedString) {
-			t.Fatalf("FAIL: %s\nInput: %q\nExpected: %#v\nGot: %#v\n", c.description, c.expression, c.expectedString, asString)
+			t.Fatalf("FAIL: %s\nInput: %q\nExpected: %#v\nGot: %#v\n", c.description, c.Expression, c.expectedString, asString)
 		}
 	}
 }
 
-var expressionTestCases = []struct {
+var ExpressionTestCases = []struct {
 	description    string
-	expression     expression
+	Expression     Expression
 	expectedString string
 }{
 	{
 		description:    "symbol",
-		expression:     newSymbol("foo"),
+		Expression:     newSymbol("foo"),
 		expectedString: "foo",
 	},
 	{
 		description:    "number",
-		expression:     newNumber(123),
+		Expression:     newNumber(123),
 		expectedString: "123",
 	},
 	{
 		description:    "number with decimal",
-		expression:     newNumber(35256.66),
+		Expression:     newNumber(35256.66),
 		expectedString: "35256.66",
 	},
 	{
 		description: "list",
-		expression: newList(
+		Expression: newList(
 			newNumber(1),
 			newSymbol("ok"),
 			newNumber(23.345),
@@ -44,7 +44,7 @@ var expressionTestCases = []struct {
 	},
 	{
 		description: "nested list",
-		expression: newList(
+		Expression: newList(
 			newNumber(1),
 			newSymbol("ok"),
 			newList(

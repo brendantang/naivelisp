@@ -4,8 +4,8 @@ import ()
 
 // eval / apply structure heavily influenced by SICP chapter: https://mitpress.mit.edu/sites/default/files/sicp/full-text/book/book-Z-H-26.html#%_sec_4.1
 
-// Eval evaluates a Lisp expression in an Environment.
-func Eval(x expression, env Environment) (expression, Environment, error) {
+// Eval evaluates a Lisp Expression in an Environment.
+func Eval(x Expression, env Environment) (Expression, Environment, error) {
 
 	switch exp := x.(type) {
 
@@ -56,7 +56,7 @@ func Eval(x expression, env Environment) (expression, Environment, error) {
 
 			// evaluate operands first
 			args := elems[1:]
-			operands := make([]expression, len(args))
+			operands := make([]Expression, len(args))
 			for i, arg := range args {
 				var err error
 				operands[i], env, err = Eval(arg, env)
@@ -71,7 +71,7 @@ func Eval(x expression, env Environment) (expression, Environment, error) {
 	return x, env, nil
 }
 
-func apply(proc procedure, env Environment, arguments ...expression) (expression, Environment, error) {
+func apply(proc procedure, env Environment, arguments ...Expression) (Expression, Environment, error) {
 	exp, err := proc.call(arguments...)
 	return exp, env, err
 }

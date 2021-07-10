@@ -4,23 +4,23 @@ import (
 	"strings"
 )
 
-// A list is an expression representing a list of expressions. A list is represented internally as a Go
+// A list is an Expression representing a list of Expressions. A list is represented internally as a Go
 // slice.
 type list struct {
-	elements []expression
+	elements []Expression
 }
 
-// newList creates a list from expressions.
-func newList(es ...expression) list {
+// newList creates a list from Expressions.
+func newList(es ...Expression) list {
 	return list{es}
 }
 
-// ToSlice converts a list into a slice of expressions.
-func (l list) toSlice() []expression {
+// ToSlice converts a list into a slice of Expressions.
+func (l list) toSlice() []Expression {
 	return l.elements
 }
 
-// Length returns the number of expressions in the list.
+// Length returns the number of Expressions in the list.
 func (l list) length() int {
 	return len(l.elements)
 }
@@ -41,8 +41,8 @@ func (l list) concat(other list) list {
 	return newList(es...)
 }
 
-// push adds expression e to the end of list l.
-func (l list) push(e expression) list {
+// push adds Expression e to the end of list l.
+func (l list) push(e Expression) list {
 	es := append(l.elements, e)
 	return newList(es...)
 }

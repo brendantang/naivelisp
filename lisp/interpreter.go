@@ -30,7 +30,7 @@ func getInput(prompt string) (string, error) {
 	return reader.ReadString('\n')
 }
 
-func interpretLine(line string, env Environment) (exp expression, newEnv Environment, err error) {
+func interpretLine(line string, env Environment) (exp Expression, newEnv Environment, err error) {
 	exp, err = Parse(line)
 	if err != nil {
 		return

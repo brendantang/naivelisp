@@ -43,7 +43,7 @@ var parserTestCases = []struct {
 	description        string
 	input              string
 	expectedTokens     []string
-	expectedExpression expression
+	expectedExpression Expression
 }{
 	{
 		description:        "symbol",

@@ -2,10 +2,10 @@ package lisp
 
 // An Environment binds variable names to their values.
 type Environment struct {
-	bindings map[string]expression
+	bindings map[string]Expression
 }
 
-func (e Environment) get(key string) (exp expression, ok bool) {
+func (e Environment) get(key string) (exp Expression, ok bool) {
 	exp, ok = e.bindings[key]
 	return
 }
@@ -13,11 +13,11 @@ func (e Environment) get(key string) (exp expression, ok bool) {
 // StdEnv returns an Environment which binds variable names for the standard,
 // primitive values (like `+` and `-`).
 func StdEnv() Environment {
-	bindings := map[string]expression{
+	bindings := map[string]Expression{
 		"+": newProcedure(
 			"+",
 			2,
-			func(xs ...expression) (expression, error) {
+			func(xs ...Expression) (Expression, error) {
 				var result number
 				for _, n := range xs[:2] {
 					n, ok := n.(number)
@@ -32,7 +32,7 @@ func StdEnv() Environment {
 		"-": newProcedure(
 			"-",
 			2,
-			func(xs ...expression) (expression, error) {
+			func(xs ...Expression) (Expression, error) {
 				a, ok := xs[0].(number)
 				if !ok {
 					return nil, typeError(a, "Number")

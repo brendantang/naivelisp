@@ -6,7 +6,7 @@ import (
 
 func TestEval(t *testing.T) {
 	for _, c := range evalTestCases {
-		var xs []expression
+		var xs []Expression
 		for i, line := range c.srcLines {
 			exp, err := Parse(line)
 			if err != nil {
@@ -14,7 +14,7 @@ func TestEval(t *testing.T) {
 			}
 			xs = append(xs, exp)
 		}
-		var gotExp expression
+		var gotExp Expression
 		env := StdEnv()
 		for i, exp := range xs {
 			newExp, newEnv, err := Eval(exp, env)

@@ -2,9 +2,9 @@ package lisp
 
 import ()
 
-// An expression is a List or an Atom. Lisp proceeds by evaluating expressions.
-type expression interface {
+// An Expression is a List or an Atom. Lisp proceeds by evaluating Expressions.
+type Expression interface {
 
-	// String returns a readable Lisp string representing the expression.
+	// String returns a readable Lisp string representing the Expression.
 	String() string
 }
