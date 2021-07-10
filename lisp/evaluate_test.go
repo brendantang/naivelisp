@@ -6,7 +6,7 @@ import (
 
 func TestEval(t *testing.T) {
 	for _, c := range evalTestCases {
-		var xs []Expression
+		var xs []expression
 		for i, line := range c.srcLines {
 			exp, err := Parse(line)
 			if err != nil {
@@ -14,10 +14,10 @@ func TestEval(t *testing.T) {
 			}
 			xs = append(xs, exp)
 		}
-		var gotExp Expression
-		env := StdEnv()
+		var gotExp expression
+		env := stdEnv()
 		for i, exp := range xs {
-			newExp, newEnv, err := Eval(exp, env)
+			newExp, newEnv, err := eval(exp, env)
 			if err != nil {
 				t.Fatalf("ERROR: %s\nInput line %d: %s\nGot error from Parse: %e", c.description, i, exp.String(), err)
 			}
@@ -46,14 +46,19 @@ var evalTestCases = []struct {
 		wantExp:     "3",
 	},
 	{
-		description: "procedure call, addition",
+		description: "primitive procedure call, addition",
 		srcLines:    []string{"(+ 3 45)"},
 		wantExp:     "48",
 	},
 	{
-		description: "procedure call, subtraction",
+		description: "primitive procedure call, subtraction",
 		srcLines:    []string{"(- 300 100)"},
 		wantExp:     "200",
+	},
+	{
+		description: "nested procedure call",
+		srcLines:    []string{"(+ 10 (- 300 100))"},
+		wantExp:     "210",
 	},
 	{
 		description: "simple definition",

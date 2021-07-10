@@ -13,55 +13,54 @@ func TestString(t *testing.T) {
 	}
 }
 
-
 var expressionTestCases = []struct {
 	description    string
-	expression     Expression
+	expression     expression
 	expectedString string
 }{
 	{
 		description:    "symbol",
-		expression:     NewSymbol("foo"),
+		expression:     newSymbol("foo"),
 		expectedString: "foo",
 	},
 	{
 		description:    "number",
-		expression:     NewNumber(123),
+		expression:     newNumber(123),
 		expectedString: "123",
 	},
 	{
 		description:    "number with decimal",
-		expression:     NewNumber(35256.66),
+		expression:     newNumber(35256.66),
 		expectedString: "35256.66",
 	},
 	{
 		description: "list",
-		expression: NewList(
-			NewNumber(1),
-			NewSymbol("ok"),
-			NewNumber(23.345),
+		expression: newList(
+			newNumber(1),
+			newSymbol("ok"),
+			newNumber(23.345),
 		),
 		expectedString: "(1 ok 23.345)",
 	},
 	{
 		description: "nested list",
-		expression: NewList(
-			NewNumber(1),
-			NewSymbol("ok"),
-			NewList(
-				NewNumber(5),
-				NewSymbol("foo"),
+		expression: newList(
+			newNumber(1),
+			newSymbol("ok"),
+			newList(
+				newNumber(5),
+				newSymbol("foo"),
 			),
-			NewList(
-				NewList(
-					NewSymbol("ok"),
-					NewSymbol("computer"),
+			newList(
+				newList(
+					newSymbol("ok"),
+					newSymbol("computer"),
 				),
-				NewList(
-					NewNumber(1),
+				newList(
+					newNumber(1),
 				),
 			),
-			NewNumber(23.345),
+			newNumber(23.345),
 		),
 		expectedString: "(1 ok (5 foo) ((ok computer) (1)) 23.345)",
 	},

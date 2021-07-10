@@ -2,19 +2,19 @@ package lisp
 
 import ()
 
-// Eval / apply structure heavily influenced by SICP chapter: https://mitpress.mit.edu/sites/default/files/sicp/full-text/book/book-Z-H-26.html#%_sec_4.1
+// eval / apply structure heavily influenced by SICP chapter: https://mitpress.mit.edu/sites/default/files/sicp/full-text/book/book-Z-H-26.html#%_sec_4.1
 
-// Eval evaluates a Lisp expression in an environment.
-func Eval(x Expression, env Environment) (Expression, Environment, error) {
+// eval evaluates a Lisp expression in an environment.
+func eval(x expression, env environment) (expression, environment, error) {
 
 	switch exp := x.(type) {
 
 	// a number evaluates to itself
-	case Number:
+	case number:
 		return exp, env, nil
 
 	// a symbol is a variable name
-	case Symbol:
+	case symbol:
 		// look up the symbol in env
 		val, keyDefined := env.get(exp.name)
 
@@ -27,10 +27,10 @@ func Eval(x Expression, env Environment) (Expression, Environment, error) {
 		return val, env, nil
 
 	//
-	case List:
+	case list:
 		elems := exp.elements
 
-		sym, ok := elems[0].(Symbol)
+		sym, ok := elems[0].(symbol)
 
 		if !ok {
 			return exp, env, runtimeErrorf("Tried to call a procedure with a non-symbol name ('%v')", elems[0])
@@ -56,10 +56,10 @@ func Eval(x Expression, env Environment) (Expression, Environment, error) {
 
 			// evaluate operands first
 			args := elems[1:]
-			operands := make([]Expression, len(args))
+			operands := make([]expression, len(args))
 			for i, arg := range args {
 				var err error
-				operands[i], env, err = Eval(arg, env)
+				operands[i], env, err = eval(arg, env)
 				if err != nil {
 					return exp, env, err
 				}
@@ -71,7 +71,7 @@ func Eval(x Expression, env Environment) (Expression, Environment, error) {
 	return x, env, nil
 }
 
-func apply(proc procedure, env Environment, arguments ...Expression) (Expression, Environment, error) {
+func apply(proc procedure, env environment, arguments ...expression) (expression, environment, error) {
 	exp, err := proc.call(arguments...)
 	return exp, env, err
 }

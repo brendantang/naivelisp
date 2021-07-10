@@ -8,10 +8,10 @@ import (
 )
 
 // Parse tries to read a string into a Lisp
-func Parse(program string) (Expression, error) { return ReadFromTokens(Tokenize(program)) }
+func Parse(program string) (expression, error) { return readFromTokens(tokenize(program)) }
 
-// Tokenize splits a string into tokens for the parser.
-func Tokenize(program string) []string {
+// tokenize splits a string into tokens for the parser.
+func tokenize(program string) []string {
 
 	// Pad parentheses with spaces, then split on spaces.
 	return strings.Fields(
@@ -22,8 +22,8 @@ func Tokenize(program string) []string {
 	)
 }
 
-// ReadFromTokens tries to parse a list of tokens into a Lisp
-func ReadFromTokens(tokens []string) (Expression, error) {
+// readFromTokens tries to parse a list of tokens into a Lisp
+func readFromTokens(tokens []string) (expression, error) {
 
 	// error if tokens empty
 	if len(tokens) == 0 {
@@ -39,50 +39,50 @@ func ReadFromTokens(tokens []string) (Expression, error) {
 
 	// Token indicates the start of a list.
 	if head == "(" {
-		return ParseList(tokens), nil
+		return parseList(tokens), nil
 	}
 
-	// Token is either a Number or a Symbol
-	return ParseAtom(head), nil
+	// Token is either a number or a Symbol
+	return parseAtom(head), nil
 }
 
-// ParseNumber tries to parse a Number from a string.
-func ParseNumber(s string) (Number, error) {
+// parseNumber tries to parse a number from a string.
+func parseNumber(s string) (number, error) {
 	val, err := strconv.ParseFloat(s, 64)
 	if err != nil {
-		return NewNumber(0), fmt.Errorf("could not convert '%s' into a number", s)
+		return newNumber(0), fmt.Errorf("could not convert '%s' into a number", s)
 	}
-	return NewNumber(val), nil
+	return newNumber(val), nil
 }
 
-// ParseSymbol parses a string into a Symbol.
-func ParseSymbol(s string) Symbol {
-	return NewSymbol(s)
+// parseSymbol parses a string into a Symbol.
+func parseSymbol(s string) symbol {
+	return newSymbol(s)
 }
 
-// ParseAtom first tries to parse a token as a Number, and if it fails, parses
+// parseAtom first tries to parse a token as a number, and if it fails, parses
 // it as a Symbol.
-func ParseAtom(s string) Expression {
-	maybeNum, err := ParseNumber(s)
+func parseAtom(s string) expression {
+	maybeNum, err := parseNumber(s)
 	if err != nil {
-		return ParseSymbol(s)
+		return parseSymbol(s)
 	}
 	return maybeNum
 }
 
-// ParseList parses a list of tokens into a List.
-func ParseList(tokens []string) List {
-	l := NewList()
+// parseList parses a list of tokens into a List.
+func parseList(tokens []string) list {
+	l := newList()
 	for i := 0; i < len(tokens); {
 		switch t := tokens[i]; t {
 		case ")":
 			return l
 		case "(":
-			sublist := ParseList(tokens[i+1:])
-			l = l.Append(sublist)
-			i += sublist.Length() + 2
+			sublist := parseList(tokens[i+1:])
+			l = l.push(sublist)
+			i += sublist.length() + 2
 		default:
-			l = l.Append(ParseAtom(t))
+			l = l.push(parseAtom(t))
 			i++
 		}
 	}

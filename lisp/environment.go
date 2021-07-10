@@ -1,32 +1,28 @@
 package lisp
 
-// An Environment maps variable names to their values.
-type Environment struct {
-	bindings map[string]Expression
+// An environment binds variable names to their values.
+type environment struct {
+	bindings map[string]expression
 }
 
-func (e Environment) get(key string) (exp Expression, ok bool) {
+func (e environment) get(key string) (exp expression, ok bool) {
 	exp, ok = e.bindings[key]
 	return
 }
 
-func (e Environment) Equal(other Environment) bool {
-	panic("TODO: check if Environments are equal")
-}
-
-func StdEnv() Environment {
-	bindings := map[string]Expression{
+func stdEnv() environment {
+	bindings := map[string]expression{
 		"+": newProcedure(
 			"+",
 			2,
-			func(xs ...Expression) (Expression, error) {
-				var result Number
+			func(xs ...expression) (expression, error) {
+				var result number
 				for _, n := range xs[:2] {
-					n, ok := n.(Number)
+					n, ok := n.(number)
 					if !ok {
-						return nil, typeError(n, "Number")
+						return nil, typeError(n, "number")
 					}
-					result = NewNumber(result.value + n.value)
+					result = newNumber(result.value + n.value)
 				}
 				return result, nil
 			},
@@ -34,19 +30,19 @@ func StdEnv() Environment {
 		"-": newProcedure(
 			"-",
 			2,
-			func(xs ...Expression) (Expression, error) {
-				a, ok := xs[0].(Number)
+			func(xs ...expression) (expression, error) {
+				a, ok := xs[0].(number)
 				if !ok {
 					return nil, typeError(a, "Number")
 				}
-				b, ok := xs[1].(Number)
+				b, ok := xs[1].(number)
 				if !ok {
 					return nil, typeError(b, "Number")
 				}
-				result := NewNumber(a.value - b.value)
+				result := newNumber(a.value - b.value)
 				return result, nil
 			},
 		),
 	}
-	return Environment{bindings}
+	return environment{bindings}
 }

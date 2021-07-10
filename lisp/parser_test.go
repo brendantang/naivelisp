@@ -6,7 +6,7 @@ import (
 
 func TestTokenize(t *testing.T) {
 	for _, c := range parserTestCases {
-		tokens := Tokenize(c.input)
+		tokens := tokenize(c.input)
 		if !TokensEqual(tokens, c.expectedTokens) {
 			t.Fatalf("FAIL: %s\nInput: %q\nExpected: %#v\nGot: %#v\n", c.description, c.input, c.expectedTokens, tokens)
 		}
@@ -43,51 +43,51 @@ var parserTestCases = []struct {
 	description        string
 	input              string
 	expectedTokens     []string
-	expectedExpression Expression
+	expectedExpression expression
 }{
 	{
 		description:        "symbol",
 		input:              "foo",
 		expectedTokens:     []string{"foo"},
-		expectedExpression: NewSymbol("foo"),
+		expectedExpression: newSymbol("foo"),
 	},
 	{
 		description:        "integer",
 		input:              "25",
 		expectedTokens:     []string{"25"},
-		expectedExpression: NewNumber(25),
+		expectedExpression: newNumber(25),
 	},
 	{
 		description:        "float",
 		input:              "253254.3",
 		expectedTokens:     []string{"253254.3"},
-		expectedExpression: NewNumber(253254.3),
+		expectedExpression: newNumber(253254.3),
 	},
 	{
 		description:    "list",
 		input:          "(1 3 4 5)",
 		expectedTokens: []string{"(", "1", "3", "4", "5", ")"},
-		expectedExpression: NewList(
-			NewNumber(1),
-			NewNumber(3),
-			NewNumber(4),
-			NewNumber(5),
+		expectedExpression: newList(
+			newNumber(1),
+			newNumber(3),
+			newNumber(4),
+			newNumber(5),
 		),
 	},
 	{
 		description:    "nested lists",
 		input:          "(1 (2 3) (4 (5)))",
 		expectedTokens: []string{"(", "1", "(", "2", "3", ")", "(", "4", "(", "5", ")", ")", ")"},
-		expectedExpression: NewList(
-			NewNumber(1),
-			NewList(
-				NewNumber(2),
-				NewNumber(3),
+		expectedExpression: newList(
+			newNumber(1),
+			newList(
+				newNumber(2),
+				newNumber(3),
 			),
-			NewList(
-				NewNumber(4),
-				NewList(
-					NewNumber(5),
+			newList(
+				newNumber(4),
+				newList(
+					newNumber(5),
 				),
 			),
 		),
@@ -96,16 +96,16 @@ var parserTestCases = []struct {
 		description:    "extra spaces",
 		input:          "(1 (2 3  )   (4  (5)))",
 		expectedTokens: []string{"(", "1", "(", "2", "3", ")", "(", "4", "(", "5", ")", ")", ")"},
-		expectedExpression: NewList(
-			NewNumber(1),
-			NewList(
-				NewNumber(2),
-				NewNumber(3),
+		expectedExpression: newList(
+			newNumber(1),
+			newList(
+				newNumber(2),
+				newNumber(3),
 			),
-			NewList(
-				NewNumber(4),
-				NewList(
-					NewNumber(5),
+			newList(
+				newNumber(4),
+				newList(
+					newNumber(5),
 				),
 			),
 		),

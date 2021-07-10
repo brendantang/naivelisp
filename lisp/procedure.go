@@ -2,11 +2,11 @@ package lisp
 
 type procedure struct {
 	name  string
-	body  func(...Expression) (Expression, error)
+	body  func(...expression) (expression, error)
 	arity int
 }
 
-func (p procedure) call(xs ...Expression) (Expression, error) {
+func (p procedure) call(xs ...expression) (expression, error) {
 	if len(xs) != p.arity {
 		return nil, runtimeErrorf(
 			"tried to apply procedure '%s' to %d arguments, but '%s' takes %d arguments",
@@ -19,7 +19,7 @@ func (p procedure) call(xs ...Expression) (Expression, error) {
 	return p.body(xs...)
 }
 
-func newProcedure(name string, arity int, body func(...Expression) (Expression, error)) procedure {
+func newProcedure(name string, arity int, body func(...expression) (expression, error)) procedure {
 	return procedure{
 		name:  name,
 		arity: arity,

@@ -4,29 +4,29 @@ import (
 	"strings"
 )
 
-// A List is an expression representing a list of expressions. A list is represented internally as a Go
+// A list is an expression representing a list of expressions. A list is represented internally as a Go
 // slice.
-type List struct {
-	elements []Expression
+type list struct {
+	elements []expression
 }
 
-// NewList creates a List from Expressions.
-func NewList(es ...Expression) List {
-	return List{es}
+// newList creates a list from expressions.
+func newList(es ...expression) list {
+	return list{es}
 }
 
-// ToSlice converts a List into a slice of Expressions.
-func (l List) ToSlice() []Expression {
+// ToSlice converts a list into a slice of expressions.
+func (l list) toSlice() []expression {
 	return l.elements
 }
 
-// Length returns the number of Expressions in the List.
-func (l List) Length() int {
+// Length returns the number of expressions in the list.
+func (l list) length() int {
 	return len(l.elements)
 }
 
-//String returns a Lisp string representing the List.
-func (l List) String() string {
+//String returns a Lisp string representing the list.
+func (l list) String() string {
 	var strs []string
 	for _, el := range l.elements {
 		strs = append(strs, el.String())
@@ -35,14 +35,14 @@ func (l List) String() string {
 	return "(" + strings.Join(strs, " ") + ")"
 }
 
-// Concat adds List other to the end of List l.
-func (l List) Concat(other List) List {
+// concat adds list other to the end of list l.
+func (l list) concat(other list) list {
 	es := append(l.elements, other.elements...)
-	return NewList(es...)
+	return newList(es...)
 }
 
-// Append adds Expression e to the end of List l.
-func (l List) Append(e Expression) List {
+// push adds expression e to the end of list l.
+func (l list) push(e expression) list {
 	es := append(l.elements, e)
-	return NewList(es...)
+	return newList(es...)
 }

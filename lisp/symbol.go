@@ -1,16 +1,16 @@
 package lisp
 
-// A Symbol is an Atomic value which represents a variable name.
-type Symbol struct {
+// A symbol is an Atomic value which represents a variable name.
+type symbol struct {
 	name string
 }
 
-// NewSymbol creates a Symbol from a string.
-func NewSymbol(s string) Symbol {
-	return Symbol{s}
+// newSymbol creates a Symbol from a string.
+func newSymbol(s string) symbol {
+	return symbol{s}
 }
 
 //String returns a Lisp string representing the symbol.
-func (s Symbol) String() string {
+func (s symbol) String() string {
 	return s.name
 }
