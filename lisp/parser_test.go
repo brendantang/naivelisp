@@ -19,7 +19,7 @@ func TestParse(t *testing.T) {
 		if err != nil {
 			t.Fatalf("FAIL: %s\nError: %v", c.description, err)
 		}
-		if !exp.Equal(c.expectedExpression) {
+		if exp.String() != c.expectedExpression.String() {
 			t.Fatalf("FAIL: %s\nInput: %q\nExpected: %#v\nGot: %#v\n", c.description, c.input, c.expectedExpression.String(), exp.String())
 		}
 	}

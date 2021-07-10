@@ -43,9 +43,9 @@ func Eval(x Expression, env Environment) (Expression, Environment, error) {
 
 		// handle the primitive special forms
 		case "if":
-			return nil, env, RuntimeError("TODO: implement `if`")
+			return exp, env, RuntimeError("TODO: implement `if`")
 		case "define":
-			return nil, env, RuntimeError("TODO: implement `define`")
+			return exp, env, RuntimeError("TODO: implement `define`")
 		default:
 			// handle a procedure call
 			val, ok := env.get(sym.name)

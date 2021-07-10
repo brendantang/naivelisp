@@ -25,25 +25,6 @@ func (l List) Length() int {
 	return len(l.elements)
 }
 
-// Equal checks if a List l is equal to another Expression without evaluating
-// them.
-func (l List) Equal(other Expression) bool {
-	otherList, ok := other.(List)
-	if ok {
-		if len(l.elements) != len(otherList.elements) {
-			return false
-		}
-		for i, v := range l.elements {
-			if !v.Equal(otherList.elements[i]) {
-				return false
-			}
-		}
-		return true
-	}
-	return false
-
-}
-
 //String returns a Lisp string representing the List.
 func (l List) String() string {
 	var strs []string

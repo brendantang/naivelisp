@@ -6,20 +6,30 @@ import (
 
 func TestEval(t *testing.T) {
 	for _, c := range evalTestCases {
-		gotExp, gotEnv, err := Eval(c.haveExp, c.haveEnv)
-		if err != nil {
-			t.Fatalf("Got error from Eval: %e", err)
+		var xs []Expression
+		for i, line := range c.srcLines {
+			exp, err := Parse(line)
+			if err != nil {
+				t.Fatalf("ERROR: %s\nInput line %d: %s\nGot error from Parse: %e", c.description, i, line, err)
+			}
+			xs = append(xs, exp)
 		}
-		if !(c.wantExp.Equal(gotExp) && c.wantEnv.Equal(gotEnv)) {
+		var gotExp Expression
+		env := StdEnv()
+		for i, exp := range xs {
+			newExp, newEnv, err := Eval(exp, env)
+			if err != nil {
+				t.Fatalf("ERROR: %s\nInput line %d: %s\nGot error from Parse: %e", c.description, i, exp.String(), err)
+			}
+			gotExp, env = newExp, newEnv
+		}
+		if c.wantExp != gotExp.String() {
 			t.Fatalf(
-				"FAIL: %s\nInput: %#v\n%#v\n\nExpected: %#v\n%#v\nGot: %#v\n%#v\n",
+				"FAIL: %s\nInput: %s\nExpected: %s\nGot: %s\n",
 				c.description,
-				c.haveExp,
-				c.haveEnv,
+				c.srcLines,
 				c.wantExp,
-				c.wantEnv,
-				gotExp,
-				gotEnv,
+				gotExp.String(),
 			)
 		}
 	}
@@ -27,16 +37,32 @@ func TestEval(t *testing.T) {
 
 var evalTestCases = []struct {
 	description string
-	haveExp     Expression
-	haveEnv     Environment
-	wantExp     Expression
-	wantEnv     Environment
+	srcLines    []string
+	wantExp     string
 }{
 	{
-		description: "number",
-		haveExp:     NewNumber(3),
-		haveEnv:     StdEnv(),
-		wantExp:     NewNumber(3),
-		wantEnv:     StdEnv(),
+		description: "number evaluates to itself",
+		srcLines:    []string{"3"},
+		wantExp:     "3",
+	},
+	{
+		description: "procedure call, addition",
+		srcLines:    []string{"(+ 3 45)"},
+		wantExp:     "48",
+	},
+	{
+		description: "procedure call, subtraction",
+		srcLines:    []string{"(- 300 100)"},
+		wantExp:     "200",
+	},
+	{
+		description: "simple definition",
+		srcLines:    []string{"(define x 333)", "x"},
+		wantExp:     "333",
+	},
+	{
+		description: "proc definition",
+		srcLines:    []string{"(define (sq x) (* x x))", "(sq 5)"},
+		wantExp:     "25",
 	},
 }

@@ -13,8 +13,6 @@ func TestString(t *testing.T) {
 	}
 }
 
-func TestEqual(t *testing.T) {
-}
 
 var expressionTestCases = []struct {
 	description    string

@@ -15,14 +15,6 @@ func NewNumber(f float64) Number {
 	return Number{f}
 }
 
-func (n Number) Equal(other Expression) bool {
-	otherNum, ok := other.(Number)
-	if ok {
-		return n == otherNum
-	}
-	return false
-}
-
 //String returns a Lisp string representing the number.
 func (n Number) String() string {
 	return strconv.FormatFloat(n.value, 'f', -1, 64)
