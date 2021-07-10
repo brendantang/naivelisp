@@ -15,9 +15,9 @@ func TestEval(t *testing.T) {
 			xs = append(xs, exp)
 		}
 		var gotExp expression
-		env := stdEnv()
+		env := StdEnv()
 		for i, exp := range xs {
-			newExp, newEnv, err := eval(exp, env)
+			newExp, newEnv, err := Eval(exp, env)
 			if err != nil {
 				t.Fatalf("ERROR: %s\nInput line %d: %s\nGot error from Parse: %e", c.description, i, exp.String(), err)
 			}

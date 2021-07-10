@@ -9,14 +9,14 @@ import (
 )
 
 func main() {
-	log.Fatal(repl("naive-lisp:  "))
+	log.Fatal(repl("naive-lisp: "))
 }
 
 // Launch an interactive lisp prompt.
 func repl(prompt string) error {
 	env := lisp.StdEnv()
 	for true {
-		input, err := getInput()
+		input, err := getInput(prompt)
 		if err != nil {
 			return err
 		}
@@ -29,7 +29,7 @@ func repl(prompt string) error {
 			return err
 		}
 		if val != nil {
-			fmt.Println(val.String())
+			fmt.Println("=> " + val.String())
 		}
 		env = newEnv
 	}
@@ -37,7 +37,8 @@ func repl(prompt string) error {
 }
 
 // Read a line from stdin.
-func getInput() (string, error) {
+func getInput(prompt string) (string, error) {
+	fmt.Print(prompt)
 	reader := bufio.NewReader(os.Stdin)
 	return reader.ReadString('\n')
 }

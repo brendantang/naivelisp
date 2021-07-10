@@ -16,6 +16,7 @@ func runtimeErrorf(formatString string, vals ...interface{}) error {
 	return runtimeError(fmt.Sprintf(formatString, vals...))
 }
 
+// typeError describes a type error.
 func typeError(val expression, want string) error {
 	return fmt.Errorf("type error: %T is not a %s", val, want)
 }

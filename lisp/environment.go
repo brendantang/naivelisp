@@ -1,16 +1,18 @@
 package lisp
 
-// An environment binds variable names to their values.
-type environment struct {
+// An Environment binds variable names to their values.
+type Environment struct {
 	bindings map[string]expression
 }
 
-func (e environment) get(key string) (exp expression, ok bool) {
+func (e Environment) get(key string) (exp expression, ok bool) {
 	exp, ok = e.bindings[key]
 	return
 }
 
-func stdEnv() environment {
+// StdEnv returns an Environment which binds variable names for the standard,
+// primitive values (like `+` and `-`).
+func StdEnv() Environment {
 	bindings := map[string]expression{
 		"+": newProcedure(
 			"+",
@@ -44,5 +46,5 @@ func stdEnv() environment {
 			},
 		),
 	}
-	return environment{bindings}
+	return Environment{bindings}
 }
