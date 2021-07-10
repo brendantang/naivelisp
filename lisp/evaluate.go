@@ -1,9 +1,6 @@
 package lisp
 
-import (
-	"errors"
-	"fmt"
-)
+import ()
 
 // Eval / apply structure heavily influenced by SICP chapter: https://mitpress.mit.edu/sites/default/files/sicp/full-text/book/book-Z-H-26.html#%_sec_4.1
 
@@ -23,7 +20,7 @@ func Eval(x Expression, env Environment) (Expression, Environment, error) {
 
 		// handle undefined
 		if !keyDefined {
-			return val, env, RuntimeErrorf("Tried to evaluate undefined symbol '%v'", exp.name)
+			return val, env, runtimeErrorf("Tried to evaluate undefined symbol '%v'", exp.name)
 		}
 
 		// evaluate the symbol to its corresponding value defined in env
@@ -36,24 +33,38 @@ func Eval(x Expression, env Environment) (Expression, Environment, error) {
 		sym, ok := elems[0].(Symbol)
 
 		if !ok {
-			return exp, env, RuntimeErrorf("Tried to call a procedure with a non-symbol name ('%v')", elems[0])
+			return exp, env, runtimeErrorf("Tried to call a procedure with a non-symbol name ('%v')", elems[0])
 		}
 
 		switch sym.name {
 
 		// handle the primitive special forms
 		case "if":
-			return exp, env, RuntimeError("TODO: implement `if`")
+			return exp, env, runtimeError("TODO: implement `if`")
 		case "define":
-			return exp, env, RuntimeError("TODO: implement `define`")
+			return exp, env, runtimeError("TODO: implement `define`")
 		default:
 			// handle a procedure call
 			val, ok := env.get(sym.name)
 			if !ok {
-				return exp, env, RuntimeErrorf("Tried to apply undefined procedure '%v'", sym.name)
+				return exp, env, runtimeErrorf("Tried to apply undefined procedure '%v'", sym.name)
 			}
 			proc, ok := val.(procedure)
-			return apply(proc, env, elems[1:]...)
+			if !ok {
+				return exp, env, runtimeErrorf("Tried to apply non-procedure type '%T'", proc)
+			}
+
+			// evaluate operands first
+			args := elems[1:]
+			operands := make([]Expression, len(args))
+			for i, arg := range args {
+				var err error
+				operands[i], env, err = Eval(arg, env)
+				if err != nil {
+					return exp, env, err
+				}
+			}
+			return apply(proc, env, operands...)
 		}
 	}
 
@@ -61,13 +72,6 @@ func Eval(x Expression, env Environment) (Expression, Environment, error) {
 }
 
 func apply(proc procedure, env Environment, arguments ...Expression) (Expression, Environment, error) {
-	return proc.body(arguments...), env, nil
-}
-
-// RuntimeError describes an error encountered while evaluating Lisp code.
-func RuntimeError(description string) error {
-	return errors.New(description)
-}
-func RuntimeErrorf(formatString string, vals ...interface{}) error {
-	return RuntimeError(fmt.Sprintf(formatString, vals...))
+	exp, err := proc.call(arguments...)
+	return exp, env, err
 }

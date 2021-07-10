@@ -14,7 +14,7 @@ func main() {
 
 // Launch an interactive lisp prompt.
 func repl(prompt string) error {
-	var env lisp.Environment
+	env := lisp.StdEnv()
 	for true {
 		input, err := getInput()
 		if err != nil {

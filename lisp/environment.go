@@ -15,5 +15,38 @@ func (e Environment) Equal(other Environment) bool {
 }
 
 func StdEnv() Environment {
-	return Environment{make(map[string]Expression)}
+	bindings := map[string]Expression{
+		"+": newProcedure(
+			"+",
+			2,
+			func(xs ...Expression) (Expression, error) {
+				var result Number
+				for _, n := range xs[:2] {
+					n, ok := n.(Number)
+					if !ok {
+						return nil, typeError(n, "Number")
+					}
+					result = NewNumber(result.value + n.value)
+				}
+				return result, nil
+			},
+		),
+		"-": newProcedure(
+			"-",
+			2,
+			func(xs ...Expression) (Expression, error) {
+				a, ok := xs[0].(Number)
+				if !ok {
+					return nil, typeError(a, "Number")
+				}
+				b, ok := xs[1].(Number)
+				if !ok {
+					return nil, typeError(b, "Number")
+				}
+				result := NewNumber(a.value - b.value)
+				return result, nil
+			},
+		),
+	}
+	return Environment{bindings}
 }
